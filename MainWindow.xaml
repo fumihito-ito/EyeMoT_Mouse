@@ -183,12 +183,24 @@
                         <!-- 非表示のRadioButton（内部状態用） -->
                         <RadioButton x:Name="RbGazeUI" GroupName="Mode" IsChecked="True" Visibility="Collapsed"/>
                         <RadioButton x:Name="RbMouse" GroupName="Mode" Visibility="Collapsed"/>
-                        <Button x:Name="BtnModeToggle" Style="{StaticResource DwellButtonStyle}" Background="#3B82F6" Click="BtnModeToggle_Click" Height="48" Margin="0,0,0,4">
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                <Path x:Name="PathModeIcon" Data="{StaticResource IconEye}" Fill="White" Width="18" Height="18" Stretch="Uniform" Margin="0,0,8,0"/>
-                                <TextBlock x:Name="TxtModeName" Text="視線UIモード" VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </Button>
+                        <Grid Margin="0,0,0,4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Button x:Name="BtnModeGazeUI" Grid.Column="0" Style="{StaticResource DwellButtonStyle}" Background="#3B82F6" Click="BtnModeGazeUI_Click" Height="48" Margin="0,0,4,0">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <Path Data="{StaticResource IconEye}" Fill="White" Width="18" Height="18" Stretch="Uniform" Margin="0,0,8,0"/>
+                                    <TextBlock Text="視線UIモード" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                            <Button x:Name="BtnModeMouse" Grid.Column="1" Style="{StaticResource DwellButtonStyle}" Background="#4B5563" Click="BtnModeMouse_Click" Height="48" Margin="4,0,0,0">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <Path Data="{StaticResource IconMouse}" Fill="White" Width="18" Height="18" Stretch="Uniform" Margin="0,0,8,0"/>
+                                    <TextBlock Text="マウスモード" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                        </Grid>
                         <TextBlock x:Name="TxtModeDesc" Text="WPFのオーバーレイを使って快適に操作します。通常はこちらを使用。" Foreground="#E5E7EB" FontSize="13" Margin="0,4,0,2" TextWrapping="Wrap"/>
                     </StackPanel>
                 </GroupBox>
