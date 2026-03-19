@@ -191,7 +191,7 @@ public partial class MainWindow : Window
         {
             BtnMinimize, BtnStart, BtnPause,
             BtnDwellNone, BtnDwellSingle, BtnDwellDouble, BtnDwellDrag,
-            BtnModeGazeUI, BtnModeMouse,
+            BtnModeToggle,
             BtnDirectToggle,
             BtnCurNone, BtnCurCross, BtnCurCircle, BtnCurDiamond, BtnCurRing, BtnCurDot,
             BtnScrollToggle,
@@ -578,8 +578,7 @@ public partial class MainWindow : Window
         if (btn == BtnDwellSingle) return _dwell.ClickType == 1;
         if (btn == BtnDwellDouble) return _dwell.ClickType == 2;
         if (btn == BtnDwellDrag)   return _dwell.ClickType == 3;
-        if (btn == BtnModeGazeUI)  return RbGazeUI?.IsChecked == true;
-        if (btn == BtnModeMouse)   return RbGazeUI?.IsChecked != true;
+        if (btn == BtnModeToggle)  return RbGazeUI?.IsChecked != true;
         if (btn == BtnDirectToggle) return _settings.DirectMode;
         if (btn == BtnScrollToggle) return _settings.ScrollEnabled;
         if (btn == BtnCurNone)    return _settings.CursorStyleIndex == 0;
@@ -596,13 +595,12 @@ public partial class MainWindow : Window
     // ラジオ式（選択中を再選択しても意味なし）
     private bool IsRadioStyleButton(Button btn) =>
         btn == BtnDwellNone || btn == BtnDwellSingle || btn == BtnDwellDouble || btn == BtnDwellDrag ||
-        btn == BtnModeGazeUI || btn == BtnModeMouse ||
         btn == BtnCurNone || btn == BtnCurCross || btn == BtnCurCircle ||
         btn == BtnCurDiamond || btn == BtnCurRing || btn == BtnCurDot;
 
     // 真のトグル（ON/OFFを反転する）
     private bool IsTrueToggleButton(Button btn) =>
-        btn == BtnDirectToggle || btn == BtnScrollToggle;
+        btn == BtnDirectToggle || btn == BtnScrollToggle || btn == BtnModeToggle;
 
     // そのボタンが選択されたときに使う色
     private Color GetSelectionColor(Button btn)
@@ -734,8 +732,7 @@ public partial class MainWindow : Window
         else if (target == BtnDwellSingle) BtnDwellSingle_Click(this, new RoutedEventArgs());
         else if (target == BtnDwellDouble) BtnDwellDouble_Click(this, new RoutedEventArgs());
         else if (target == BtnDwellDrag) BtnDwellDrag_Click(this, new RoutedEventArgs());
-        else if (target == BtnModeGazeUI) BtnModeGazeUI_Click(this, new RoutedEventArgs());
-        else if (target == BtnModeMouse) BtnModeMouse_Click(this, new RoutedEventArgs());
+        else if (target == BtnModeToggle) BtnModeToggle_Click(this, new RoutedEventArgs());
         else if (target == BtnDirectToggle) BtnDirectToggle_Click(this, new RoutedEventArgs());
         
         // Cursor and Scroll
@@ -827,15 +824,10 @@ public partial class MainWindow : Window
         UpdateDwellButtonsUI();
     }
 
-    private void BtnModeGazeUI_Click(object sender, RoutedEventArgs e)
+    private void BtnModeToggle_Click(object sender, RoutedEventArgs e)
     {
-        RbGazeUI.IsChecked = true;
-        UpdateModeButtonsUI();
-    }
-
-    private void BtnModeMouse_Click(object sender, RoutedEventArgs e)
-    {
-        RbMouse.IsChecked = true;
+        if (RbGazeUI.IsChecked == true) RbMouse.IsChecked = true;
+        else RbGazeUI.IsChecked = true;
         UpdateModeButtonsUI();
     }
 
@@ -870,18 +862,15 @@ public partial class MainWindow : Window
 
     private void UpdateModeButtonsUI()
     {
-        if (BtnModeGazeUI == null || BtnModeMouse == null) return;
+        if (BtnModeToggle == null) return;
 
         bool isGazeUI = RbGazeUI?.IsChecked == true;
-        var selectedBrush = ColAccent;
-        var normalBrush = new SolidColorBrush(Color.FromRgb(0x4B, 0x55, 0x63));
-        var selectedBorder = new SolidColorBrush(Color.FromRgb(0x25, 0x63, 0xEB));
-        var normalBorder = new SolidColorBrush(Color.FromRgb(0x6B, 0x72, 0x80));
-
-        BtnModeGazeUI.Background = isGazeUI ? selectedBrush : normalBrush;
-        BtnModeGazeUI.BorderBrush = isGazeUI ? selectedBorder : normalBorder;
-        BtnModeMouse.Background = !isGazeUI ? selectedBrush : normalBrush;
-        BtnModeMouse.BorderBrush = !isGazeUI ? selectedBorder : normalBorder;
+        BtnModeToggle.Background = isGazeUI ? ColAccent : new SolidColorBrush(Color.FromRgb(0x4B, 0x55, 0x63));
+        BtnModeToggle.BorderBrush = isGazeUI
+            ? new SolidColorBrush(Color.FromRgb(0x25, 0x63, 0xEB))
+            : new SolidColorBrush(Color.FromRgb(0x6B, 0x72, 0x80));
+        PathModeIcon.Data = (Geometry)(isGazeUI ? FindResource("IconEye") : FindResource("IconMouse"));
+        TxtModeName.Text = isGazeUI ? "視線UIモード" : "マウスモード";
 
         // 視線UIモードのときは注視操作枠を無効化する
         if (GbDwell != null)
