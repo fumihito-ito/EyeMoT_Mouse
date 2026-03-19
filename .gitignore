@@ -1,0 +1,17 @@
+# Build outputs
+bin/
+obj/
+binpublish/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# Logs
+*.log
+build_log.txt
+
+# OS
+Thumbs.db
+desktop.ini
