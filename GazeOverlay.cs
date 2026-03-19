@@ -189,7 +189,7 @@ public class GazeOverlay : Window
         if (_scrollEnabled && _scrollEdgeSize > 0)
         {
             double scaleEdge = _scrollEdgeSize * _dpiScaleY;
-            var overlayBrush = new SolidColorBrush(Color.FromArgb(30, 59, 130, 246));
+            var overlayBrush = new SolidColorBrush(Color.FromArgb(40, 245, 158, 11));
 
             dc.DrawRectangle(overlayBrush, null, new Rect(0, 0, Width, scaleEdge));
             dc.DrawRectangle(overlayBrush, null, new Rect(0, Math.Max(0, Height - scaleEdge), Width, scaleEdge));
@@ -212,23 +212,14 @@ public class GazeOverlay : Window
         {
             double r = FixedDwellIndicatorRadius * _dpiScaleX;
 
-            // 半透明背景円
-            dc.DrawEllipse(
-                new SolidColorBrush(Color.FromArgb(30, 255, 255, 255)),
-                new Pen(new SolidColorBrush(Color.FromArgb(50, 255, 255, 255)), 1.5),
-                new Point(cx, cy), r, r);
-
             // 進捗アーク（ドラッグ中はオレンジ、通常はブルー）
             double sweep = _dwellProgress * 360;
             var arc = CreateArc(cx, cy, r - 2, -90, sweep);
             var arcColor = _dragActive
-                ? Color.FromArgb(180, 245, 158, 11)    // オレンジ
-                : Color.FromArgb(180, 59, 130, 246);   // ブルー
-            var arcFill = _dragActive
-                ? Color.FromArgb(80, 245, 158, 11)
-                : Color.FromArgb(80, 59, 130, 246);
+                ? Color.FromArgb(220, 245, 158, 11)    // オレンジ
+                : Color.FromArgb(220, 59, 130, 246);   // ブルー
             dc.DrawGeometry(
-                new SolidColorBrush(arcFill),
+                Brushes.Transparent,
                 new Pen(new SolidColorBrush(arcColor), 3),
                 arc);
         }
@@ -398,8 +389,7 @@ public class GazeOverlay : Window
             case CursorStyle.Circle:
             {
                 double r = h - m;
-                var fillColor = _dragActive ? Color.FromArgb(140, 245, 158, 11) : Color.FromArgb(100, 59, 130, 246);
-                dc.DrawEllipse(new SolidColorBrush(fillColor),
+                dc.DrawEllipse(Brushes.Transparent,
                     new Pen(cursorWhite, lineW), new Point(cx, cy), r, r);
                 double cd = Math.Max(2, s / 12);
                 dc.DrawEllipse(cursorWhite, null, new Point(cx, cy), cd, cd);
@@ -418,8 +408,7 @@ public class GazeOverlay : Window
                     ctx.LineTo(new Point(cx - d, cy), true, false);
                 }
                 geo.Freeze();
-                var diamondFill = _dragActive ? Color.FromArgb(140, 245, 158, 11) : Color.FromArgb(100, 16, 185, 129);
-                dc.DrawGeometry(new SolidColorBrush(diamondFill),
+                dc.DrawGeometry(Brushes.Transparent,
                     new Pen(cursorWhite, lineW), geo);
                 double dd = Math.Max(2, s / 12);
                 dc.DrawEllipse(cursorWhite, null, new Point(cx, cy), dd, dd);
