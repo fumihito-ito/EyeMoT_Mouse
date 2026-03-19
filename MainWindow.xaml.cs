@@ -465,8 +465,8 @@ public partial class MainWindow : Window
     {
         if (element == null || !element.IsEnabled) return false;
 
-        // 一時停止中はカーソルが凍結しているためマウスホバーを無視
-        bool mouseHover = !_paused && element.IsMouseOver;
+        // 一時停止中・視線UIモード時はマウスホバーを無視
+        bool mouseHover = !_paused && _activeMode != ControlMode.GazeUIMode && element.IsMouseOver;
 
         // 視線ホバーを許可する条件:
         //   動作中: 全ボタン（ただし一時停止中はBtnPauseのみ）
