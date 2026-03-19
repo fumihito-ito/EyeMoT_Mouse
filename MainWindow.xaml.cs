@@ -378,7 +378,7 @@ public partial class MainWindow : Window
             if (_overlay != null)
             {
                 _overlay.SetCursorAppearance(GetSelectedCursorStyle(), (int)SlCursorSize.Value);
-                bool dwellOn = _dwell.ClickType != 0 && _dwellProgress > 0.01;
+                bool dwellOn = _activeMode == ControlMode.MouseMode && _dwell.ClickType != 0 && _dwellProgress > 0.01;
                 _overlay.SetDwellState(dwellOn, _dwellProgress, (int)SlDwellRadius.Value);
 
                 _overlay.SetScrollState(_settings.ScrollEnabled, (int)(SlScrollEdge?.Value ?? 100));
