@@ -209,8 +209,10 @@ public partial class MainWindow : Window
         if (!_running || _paused) return;
 
         if (_activeMode == ControlMode.MouseMode || _isDragging)
+        {
             SetCursorPos((int)fx, (int)fy);
-        _scroller.Update(fy);
+            _scroller.Update(fy);
+        }
         _dwell.Feed(fx, fy);
     }
 

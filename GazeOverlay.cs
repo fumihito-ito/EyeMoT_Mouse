@@ -212,14 +212,23 @@ public class GazeOverlay : Window
         {
             double r = FixedDwellIndicatorRadius * _dpiScaleX;
 
+            // 半透明背景円
+            dc.DrawEllipse(
+                new SolidColorBrush(Color.FromArgb(30, 255, 255, 255)),
+                new Pen(new SolidColorBrush(Color.FromArgb(50, 255, 255, 255)), 1.5),
+                new Point(cx, cy), r, r);
+
             // 進捗アーク（ドラッグ中はオレンジ、通常はブルー）
             double sweep = _dwellProgress * 360;
             var arc = CreateArc(cx, cy, r - 2, -90, sweep);
             var arcColor = _dragActive
                 ? Color.FromArgb(220, 245, 158, 11)    // オレンジ
                 : Color.FromArgb(220, 59, 130, 246);   // ブルー
+            var arcFill = _dragActive
+                ? Color.FromArgb(160, 245, 158, 11)
+                : Color.FromArgb(160, 59, 130, 246);
             dc.DrawGeometry(
-                Brushes.Transparent,
+                new SolidColorBrush(arcFill),
                 new Pen(new SolidColorBrush(arcColor), 3),
                 arc);
         }
@@ -389,6 +398,8 @@ public class GazeOverlay : Window
             case CursorStyle.Circle:
             {
                 double r = h - m;
+                dc.DrawEllipse(null,
+                    new Pen(new SolidColorBrush(Color.FromArgb(150, 0, 0, 0)), lineW + 2), new Point(cx, cy), r, r);
                 dc.DrawEllipse(Brushes.Transparent,
                     new Pen(cursorWhite, lineW), new Point(cx, cy), r, r);
                 double cd = Math.Max(2, s / 12);
@@ -408,6 +419,8 @@ public class GazeOverlay : Window
                     ctx.LineTo(new Point(cx - d, cy), true, false);
                 }
                 geo.Freeze();
+                dc.DrawGeometry(null,
+                    new Pen(new SolidColorBrush(Color.FromArgb(150, 0, 0, 0)), lineW + 2), geo);
                 dc.DrawGeometry(Brushes.Transparent,
                     new Pen(cursorWhite, lineW), geo);
                 double dd = Math.Max(2, s / 12);
