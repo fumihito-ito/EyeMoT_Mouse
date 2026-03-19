@@ -184,7 +184,7 @@ public partial class MainWindow : Window
     {
         _hoverableButtons = new List<Button>
         {
-            BtnMinimize, BtnStart, BtnPause,
+            BtnMinimize, BtnStart, BtnPause, BtnReset,
             BtnDwellNone, BtnDwellSingle, BtnDwellDouble, BtnDwellDrag,
             BtnModeGazeUI, BtnModeMouse,
             BtnDirectToggle,
@@ -496,8 +496,9 @@ public partial class MainWindow : Window
 
         // ボタンの背景色を元に戻す
         ResetButtonBackground(BtnMinimize, Color.FromRgb(0x37, 0x41, 0x51));
-        ResetButtonBackground(BtnStart, _running ? Color.FromRgb(0xEF, 0x44, 0x44) : Color.FromRgb(0x10, 0xB9, 0x81)); // ColDanger or ColSuccess
-        ResetButtonBackground(BtnPause, Color.FromRgb(0xF5, 0x9E, 0x0B)); // ColWarn
+        ResetButtonBackground(BtnStart, _running ? Color.FromRgb(0xEF, 0x44, 0x44) : Color.FromRgb(0x10, 0xB9, 0x81));
+        ResetButtonBackground(BtnPause, Color.FromRgb(0xF5, 0x9E, 0x0B));
+        ResetButtonBackground(BtnReset, Color.FromRgb(0x4B, 0x55, 0x63));
 
         UpdateDwellButtonsUI();
         UpdateModeButtonsUI();
@@ -685,6 +686,7 @@ public partial class MainWindow : Window
         if (target == BtnMinimize) MinimizeToMiniPanel();
         else if (target == BtnStart) ToggleTracking();
         else if (target == BtnPause) TogglePause();
+        else if (target == BtnReset) BtnReset_Click(this, new RoutedEventArgs());
         else if (target == BtnDwellNone) BtnDwellNone_Click(this, new RoutedEventArgs());
         else if (target == BtnDwellSingle) BtnDwellSingle_Click(this, new RoutedEventArgs());
         else if (target == BtnDwellDouble) BtnDwellDouble_Click(this, new RoutedEventArgs());

@@ -1,7 +1,7 @@
 <Window x:Class="TobiiEyeMouse.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Tobii Eye Mouse — 視線マウス制御" Width="1200" Height="900"
+        Title="EyeMoT マウス Neo" Width="1200" Height="900"
         WindowState="Normal" ResizeMode="CanResize" WindowStartupLocation="CenterScreen"
         Background="#1E1E2E" Foreground="#F8FAFC"
         FontFamily="Segoe UI" FontSize="16"
@@ -116,7 +116,7 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Grid.Column="0">
-                <TextBlock Text="Tobii Eye Mouse — 視線制御パネル" FontSize="26" FontWeight="Bold" Foreground="#3B82F6"/>
+                <TextBlock Text="EyeMoT マウス Neo" FontSize="26" FontWeight="Bold" Foreground="#3B82F6"/>
                 <TextBlock Text="視線でマウスカーソルを制御します。各項目を調整して使いやすく設定してください。" FontSize="14" Foreground="#E5E7EB" Margin="0,2,0,0"/>
             </StackPanel>
 
@@ -388,10 +388,9 @@
             </StackPanel>
 
             <StackPanel Grid.Column="2" Margin="8,0,0,0">
-                <!-- リセットボタンは視線ホバーで発火すると危険なのでそのまま、レイアウトだけ揃える -->
-                <Button x:Name="BtnReset" Content="↺ リセット" Style="{StaticResource ActionButtonStyle}" 
+                <Button x:Name="BtnReset" Content="↺ リセット" Style="{StaticResource ActionButtonStyle}"
                         FontSize="16" Background="#4B5563" Click="BtnReset_Click" Margin="0"/>
-                <TextBlock Text="クリック操作のみ" Foreground="#9CA3AF" FontSize="12"
+                <TextBlock x:Name="TxtResetHint" Text="注視/ホバーでリセット" Foreground="#D1D5DB" FontSize="12"
                            HorizontalAlignment="Center" Margin="0,4,0,2"/>
             </StackPanel>
         </Grid>
