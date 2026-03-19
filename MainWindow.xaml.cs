@@ -53,11 +53,6 @@ public partial class MainWindow : Window
     private const int CornerSizePx = 150;
     private readonly Stopwatch _pauseBlinkSw = new();
 
-    // ホバー中のボタンContent一時変更用
-    private Button? _hoverModifiedButton;
-    private object? _hoverModifiedButtonOriginalContent;
-    // Content が StackPanel の場合は内部 TextBlock のテキストを直接変更する
-    private TextBlock? _hoverModifiedTextBlock;
 
     public MainWindow()
     {
@@ -487,19 +482,6 @@ public partial class MainWindow : Window
 
     private void ResetActionHoverState()
     {
-        // ホバー中に変更したボタンContent / TextBlock を元に戻す
-        if (_hoverModifiedTextBlock != null)
-        {
-            _hoverModifiedTextBlock.Text = _hoverModifiedButtonOriginalContent as string ?? "";
-            _hoverModifiedTextBlock = null;
-        }
-        else if (_hoverModifiedButton != null)
-        {
-            _hoverModifiedButton.Content = _hoverModifiedButtonOriginalContent;
-        }
-        _hoverModifiedButton = null;
-        _hoverModifiedButtonOriginalContent = null;
-
         _currentHoverTarget = null;
         _actionDwellSw.Reset();
 
@@ -664,33 +646,6 @@ public partial class MainWindow : Window
             return;
         }
 
-        // トグル・ラジオボタン: Content にプレフィックスを追加
-        if (IsRadioStyleButton(btn) || IsTrueToggleButton(btn))
-        {
-            string prefix = isOn
-                ? (IsTrueToggleButton(btn) ? "✕ " : "✔ ")  // 真トグルON=解除, ラジオON=選択確認
-                : "▶ ";                                       // 未選択=これから有効化
-
-            _hoverModifiedButton = btn;
-
-            if (btn.Content is string strContent)
-            {
-                // Content が単純文字列のボタン（注視タイプ・カーソル等）
-                _hoverModifiedButtonOriginalContent = strContent;
-                btn.Content = prefix + strContent;
-            }
-            else if (btn.Content is Panel panel)
-            {
-                // Content が StackPanel 等（モードボタン等）→ 内部 TextBlock のテキストを変更
-                var tb = panel.Children.OfType<TextBlock>().FirstOrDefault();
-                if (tb != null)
-                {
-                    _hoverModifiedTextBlock = tb;
-                    _hoverModifiedButtonOriginalContent = tb.Text;
-                    tb.Text = prefix + tb.Text;
-                }
-            }
-        }
     }
 
     private void ApplyButtonProgress(Button btn, double progress, Color baseColor, Color progressColor)
@@ -842,10 +797,10 @@ public partial class MainWindow : Window
 
         var selectedBrush = ColAccent;
         var normalBrush = new SolidColorBrush(Color.FromRgb(0x4B, 0x55, 0x63));
-        var selectedBorder = new SolidColorBrush(Color.FromRgb(0x25, 0x63, 0xEB));
-        var normalBorder = new SolidColorBrush(Color.FromRgb(0x6B, 0x72, 0x80));
+        var selectedBorder = Brushes.White;
+        var normalBorder = Brushes.Transparent;
         var dragSelectedBrush = new SolidColorBrush(Color.FromRgb(0xF5, 0x9E, 0x0B));
-        var dragSelectedBorder = new SolidColorBrush(Color.FromRgb(0xD9, 0x77, 0x06));
+        var dragSelectedBorder = Brushes.White;
 
         BtnDwellNone.Background = _dwell.ClickType == 0 ? selectedBrush : normalBrush;
         BtnDwellNone.BorderBrush = _dwell.ClickType == 0 ? selectedBorder : normalBorder;
@@ -972,8 +927,8 @@ public partial class MainWindow : Window
         
         var selectedBrush = ColAccent;
         var normalBrush = new SolidColorBrush(Color.FromRgb(0x4B, 0x55, 0x63));
-        var selectedBorder = new SolidColorBrush(Color.FromRgb(0x25, 0x63, 0xEB));
-        var normalBorder = new SolidColorBrush(Color.FromRgb(0x6B, 0x72, 0x80));
+        var selectedBorder = Brushes.White;
+        var normalBorder = Brushes.Transparent;
 
         BtnCurNone.Background = _settings.CursorStyleIndex == 0 ? selectedBrush : normalBrush;
         BtnCurNone.BorderBrush = _settings.CursorStyleIndex == 0 ? selectedBorder : normalBorder;
